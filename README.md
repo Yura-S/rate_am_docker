@@ -1,1 +1,6 @@
-# rate_am_docker
+Requirements:
+
+packer
+terraform
+aws-cli
+ansible
