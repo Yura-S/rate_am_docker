@@ -18,8 +18,8 @@ jobs:
         
     - name: List files
       working-directory: ansible
-      run: ls -la
-      if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'ansible/Dockerfile') }}
+      run: echo aaaaa
+      if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'Dockerfile') }}
       
      
     #- name: Configure AWS credentials
