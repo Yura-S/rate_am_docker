@@ -9,15 +9,8 @@ on:
       - work
 
 jobs:
-
-  terraform:
-    name: 'Terraform'
+  build:
     runs-on: ubuntu-latest
-    environment: production
-    
-    defaults:
-      run:
-        shell: bash
 
     steps:
     - name: Checkout code
