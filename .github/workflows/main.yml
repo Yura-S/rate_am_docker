@@ -18,8 +18,7 @@ jobs:
         
     - name: List files
       run: |
-          #if [[ "${{ github.event_name }}" == "push" && "${{ github.event.head_commit.modified }}" == *"ansible/Dockerfile"* ]]; then
-          if [[ 1=7 ]]; then 
+          if [[ 1 == 7 ]]; then 
             echo "The file 'ansible/Dockerfile' is modified."
           else
             echo "The file 'ansible/Dockerfile' is not modified."
