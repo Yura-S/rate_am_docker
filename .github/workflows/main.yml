@@ -18,7 +18,7 @@ jobs:
         
     - name: List files
       run: |
-          if [[ 1 == 7 ]]; then 
+          if [[ 1 == 1 ]]; then 
             echo "The file 'ansible/Dockerfile' is modified."
           else
             echo "The file 'ansible/Dockerfile' is not modified."
