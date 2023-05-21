@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - work
-    paths:
-      - ansible/Dockerfile
   pull_request:
     branches:
       - work
-    paths:
-      - ansible/Dockerfile
 
 jobs:
 
@@ -29,6 +25,7 @@ jobs:
         
     - name: List files
       run: ls -la  
+      if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'Dockerfile') }}
      
     #- name: Configure AWS credentials
     #  uses: aws-actions/configure-aws-credentials@v1
