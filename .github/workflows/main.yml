@@ -13,8 +13,11 @@ on:
       - ansible/Dockerfile
 
 jobs:
-  build:
+
+  terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
+    environment: production
     
     defaults:
       run:
