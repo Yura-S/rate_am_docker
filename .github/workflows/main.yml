@@ -2,8 +2,15 @@ name: CI
 
 on:
   push:
+    branches:
+      - work
     paths:
-      - README.md
+      - ansible/Dockerfile
+  pull_request:
+    branches:
+      - work
+    paths:
+      - ansible/Dockerfile
 
 jobs:
   build:
