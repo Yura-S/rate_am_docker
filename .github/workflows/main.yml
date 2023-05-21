@@ -18,7 +18,7 @@ jobs:
         
     - name: List files
       run: pwd
-      if: ${{ contains(github.event.head_commit.modified, 'ansible/Dockerfile') }}
+      if: contains(github.event.head_commit.modified, 'ansible/Dockerfile')
       
      
     #- name: Configure AWS credentials
