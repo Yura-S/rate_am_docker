@@ -18,11 +18,10 @@ jobs:
         
     - name: List files
       run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.event.head_commit.modified }}" == "Dockerfile" ]]; then
-            echo "The file 'Dockerfile' is modified."
-          else
-            echo "The file 'Dockerfile' is not modified."
-          fi
+          echo "Modified Files:"
+          for file in "${{ github.event.head_commit.modified }}"; do
+            echo "- $file"
+          done
      
     #- name: Configure AWS credentials
     #  uses: aws-actions/configure-aws-credentials@v1
