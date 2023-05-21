@@ -21,7 +21,6 @@ jobs:
       if: |
        (github.event_name == 'push') &&
        contains(github.event.head_commit.modified, 'ansible/Dockerfile')
-      run: echo aaaaaa 
      
     #- name: Configure AWS credentials
     #  uses: aws-actions/configure-aws-credentials@v1
