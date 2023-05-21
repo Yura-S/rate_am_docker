@@ -17,9 +17,8 @@ jobs:
       uses: actions/checkout@v2
         
     - name: List files
-      working-directory: ansible
       run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.event.head_commit.modified }}" == *"Dockerfile"* ]]; then
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.event.commits[0].modified }}" == *"ansibleDockerfile"* ]]; then
             echo "The file 'ansible/Dockerfile' is modified."
           else
             echo "The file 'ansible/Dockerfile' is not modified."
