@@ -30,28 +30,28 @@ jobs:
     - name: List files
       run: ls -la  
      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}  
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    #- name: Configure AWS credentials
+    #  uses: aws-actions/configure-aws-credentials@v1
+    #  with:
+    #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #    aws-region: ${{ secrets.AWS_REGION }}  
+    
+    #- name: Setup Terraform
+    #  uses: hashicorp/setup-terraform@v1
+    #  with:
+    #    cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3
+    #- name: Setup Python
+    #  uses: actions/setup-python@v2
+    #  with:
+    #    python-version: 3
         
-    - name: Install dependencies
-      run: pip install ansible    
+    #- name: Install dependencies
+    #  run: pip install ansible    
         
-    - name: terraform destroy  
-      working-directory: terraform
-      run: terraform destroy -auto-approve;ls -la
+    #- name: terraform destroy  
+    #  working-directory: terraform
+    #  run: terraform destroy -auto-approve;ls -la
       
       
