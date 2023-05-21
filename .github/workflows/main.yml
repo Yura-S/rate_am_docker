@@ -6,11 +6,6 @@ on:
       - work
     paths:
       - README.md
-  pull_request:
-    branches:
-      - work
-    paths:
-      - README.md
 
 jobs:
   build:
