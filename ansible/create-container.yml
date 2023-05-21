@@ -1,0 +1,27 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Copy Dockerfile
+      copy:
+        src: "{{ playbook_dir }}/Dockerfile"
+        dest: /root
+        owner: root
+        group: root
+        mode: '0644'  
+    
+    - name: Build Docker image
+      docker_image:
+        name: image_with_rate_am 
+        source: build    
+        build:
+          path: /root  
+
+    - name: run docker container
+      docker_container:
+        image: image_with_rate_am:latest
+        name: nginx
+        state: started
+        auto_remove: true
+        ports:
+          - "80:80"

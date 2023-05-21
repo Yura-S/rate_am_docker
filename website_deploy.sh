@@ -2,6 +2,7 @@
 
 ################################################building image with packer
 cd ./packer/
+
 packer init .
 if [[ $? != 0 ]]
   then
@@ -73,7 +74,7 @@ aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --insta
 
 ################################################creating containers using ansible
 
-cd ../terraform_ansible/
+cd ../ansible/
 
 echo "server1 ansible_host=${URL} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
 
@@ -82,4 +83,5 @@ ansible-playbook -i inventory.ini create-container.yml
 rm inventory.ini
 
 ################################################showing instance public ip
+
 echo "instance public ip is ${URL}"
