@@ -55,3 +55,7 @@ jobs:
       
     - name: run main script
       run: ./website_deploy.sh
+
+    - name: destruction
+      working-directory: terraform
+      run: terraform destroy -auto-approve
