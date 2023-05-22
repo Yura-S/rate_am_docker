@@ -68,6 +68,8 @@ echo CREATED INSTANCE - $INSTANCE_ID
 
 ################################################generating ssh key and sending to created instance
 
+cd ../ansible/
+
 yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
 
 ls ./
@@ -76,13 +78,11 @@ aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --insta
 
 ################################################creating containers using ansible
 
-cd ../ansible/
-
 echo "server1 ansible_host=${URL} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
 
-ansible-playbook -i inventory.ini create-container.yml
+ansible-playbook -i inventory.ini --private-key=./id_rsa create-container.yml
 
-rm inventory.ini
+rm inventory.ini id_rsa id_rsa.pub
 
 ################################################showing instance public ip
 
