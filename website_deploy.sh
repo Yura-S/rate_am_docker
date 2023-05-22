@@ -80,7 +80,7 @@ aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --insta
 
 echo "server1 ansible_host=${URL} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
 
-sudo ansible-playbook -i inventory.ini --private-key=./id_rsa create-container.yml
+ansible-playbook -i inventory.ini --private-key=./id_rsa create-container.yml
 
 rm inventory.ini id_rsa id_rsa.pub
 
