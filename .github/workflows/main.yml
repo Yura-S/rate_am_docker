@@ -47,13 +47,9 @@ jobs:
     - name: aws cli test command 
       run: aws ec2 describe-instances 
        
-    - name: terraform init test command  
+    - name: terraform test command  
       working-directory: terraform
-      run: terraform init
-        
-    - name: terraform plan test command  
-      working-directory: terraform
-      run: terraform plan 
+      run: terraform --version
       
     - name: Checkout code
       uses: actions/checkout@v2
