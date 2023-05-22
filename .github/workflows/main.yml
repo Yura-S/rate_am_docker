@@ -42,15 +42,15 @@ jobs:
        python-version: 3
         
     - name: Install dependencies
-      run: pip install ansible    
+      run: pip install ansible  
+    
+    - name: aws cli test command 
+      run: aws ec2 describe-instances 
        
-    - name: terraform init command  
+    - name: terraform init test command  
       working-directory: terraform
       run: terraform init
         
-    - name: terraform plan command  
+    - name: terraform plan test command  
       working-directory: terraform
-      run: terraform plan
-      
-    - name: aws cli test command 
-      run: aws ec2 describe-instances  
+      run: terraform plan 
