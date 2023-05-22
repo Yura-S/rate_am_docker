@@ -45,7 +45,10 @@ jobs:
       run: pip install ansible  
       
     - name: Set up Packer
-      uses: hashicorp/setup-packer  
+      run: |
+          wget https://releases.hashicorp.com/packer/1.7.0/packer_1.7.0_linux_amd64.zip
+          unzip packer_1.7.0_linux_amd64.zip
+          sudo mv packer /usr/local/bin/
     
     - name: packer test command 
       run: packer --version 
