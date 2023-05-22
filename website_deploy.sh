@@ -72,7 +72,7 @@ cd ../ansible/
 
 yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
 
-ls ./
+chmod 600 ./id_rsa
 
 aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa.pub
 
@@ -80,7 +80,7 @@ aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --insta
 
 echo "server1 ansible_host=${URL} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
 
-ansible-playbook -i inventory.ini --private-key=./id_rsa create-container.yml
+sudo ansible-playbook -i inventory.ini --private-key=./id_rsa create-container.yml
 
 rm inventory.ini id_rsa id_rsa.pub
 
