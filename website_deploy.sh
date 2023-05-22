@@ -68,11 +68,11 @@ echo CREATED INSTANCE - $INSTANCE_ID
 
 ################################################generating ssh key and sending to created instance
 
-yes | sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
+yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
 
-ls ~/.ssh
+ls ./
 
-aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://~/.ssh/id_rsa.pub
+aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa.pub
 
 ################################################creating containers using ansible
 
