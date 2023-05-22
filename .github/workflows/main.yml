@@ -52,4 +52,5 @@ jobs:
       working-directory: terraform
       run: terraform plan
       
-      
+    - name: aws cli test command 
+      run: aws ec2 describe-instances  
