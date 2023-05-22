@@ -20,7 +20,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
         
-    - name: List files
+    - name: show Dockerfile
       working-directory: ansible
       run: cat Dockerfile
      
