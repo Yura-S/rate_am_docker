@@ -43,6 +43,12 @@ jobs:
         
     - name: Install dependencies
       run: pip install ansible  
+      
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v2  
+    
+    - name: packer test command 
+      run: packer --version 
     
     - name: ansible test command 
       run: ansible --version 
