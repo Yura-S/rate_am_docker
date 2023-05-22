@@ -46,8 +46,8 @@ jobs:
       
     - name: Set up Packer
       run: |
-          wget https://releases.hashicorp.com/packer/1.7.0/packer_1.7.0_linux_amd64.zip
-          unzip packer_1.7.0_linux_amd64.zip
+          curl -O https://releases.hashicorp.com/packer/1.7.0/packer_1.7.0_linux_amd64.tar.gz
+          tar xzf packer_1.7.0_linux_amd64.tar.gz
           sudo mv packer /usr/local/bin/
     
     - name: packer test command 
