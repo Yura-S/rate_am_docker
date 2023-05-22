@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - main
-    #paths:
-    #- 'ansible/Dockerfile'  
+    paths:
+    - 'ansible/Dockerfile'  
   pull_request:
     branches:
       - main
-    #paths:
-    #  - 'ansible/Dockerfile'  
+    paths:
+      - 'ansible/Dockerfile'  
 
 jobs:
   build:
@@ -52,3 +52,6 @@ jobs:
 
     - name: repo path
       run: pwd
+      
+    - name: run main script
+      run: ./
