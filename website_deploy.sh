@@ -3,19 +3,19 @@
 ################################################building image with packer
 cd ./packer/
 
-packer init .
-if [[ $? != 0 ]]
-  then
-    echo "Something wrong while packer init"
-    exit 1
-fi
+#packer init .
+#if [[ $? != 0 ]]
+#  then
+#    echo "Something wrong while packer init"
+#    exit 1
+#fi
 
-packer build aws-ubuntu.pkr.hcl
-if [[ $? != 0 ]]
-  then
-    echo "Something wrong while executing packer build"
-    exit 1
-fi
+#packer build aws-ubuntu.pkr.hcl
+#if [[ $? != 0 ]]
+#  then
+#    echo "Something wrong while executing packer build"
+#    exit 1
+#fi
 
 ################################################creating infrastructure with terraform
 cd ../terraform/
@@ -68,9 +68,11 @@ echo CREATED INSTANCE - $INSTANCE_ID
 
 ################################################generating ssh key and sending to created instance
 
-ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N "" -q -f
+sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q -f
 
-aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://root/.ssh/id_rsa.pub
+ls ~/.ssh
+
+aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://~/.ssh/id_rsa.pub
 
 ################################################creating containers using ansible
 
