@@ -53,9 +53,14 @@ jobs:
     - name: repo path
       run: pwd
       
-    - name: run main script
-      run: ./website_deploy.sh
+    - name: run packer initialization
+      working-directory: packer
+      run: packer init .
+      
+    - name: run packer building
+      working-directory: packer
+      run: packer init .
 
-    - name: destruction
-      working-directory: terraform
-      run: terraform destroy -auto-approve
+    #- name: destruction
+    #  working-directory: terraform
+    #  run: terraform destroy -auto-approve
