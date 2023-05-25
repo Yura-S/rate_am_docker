@@ -53,14 +53,26 @@ jobs:
     - name: repo path
       run: pwd
       
-    - name: run packer initialization
-      working-directory: packer
-      run: packer init .
+    #- name: run packer initialization
+    #  working-directory: packer
+    #  run: packer init .
       
-    - name: run packer building
-      working-directory: packer
-      run: packer build aws-ubuntu.pkr.hcl
+    #- name: run packer building
+    #  working-directory: packer
+    #  run: packer build aws-ubuntu.pkr.hcl
+    
+    - name: run terraform initialization
+      working-directory: terraform
+      run: terraform init
+      
+    - name: run terraform planning
+      working-directory: terraform
+      run: terraform plan
+      
+    - name: run terraform applying
+      working-directory: terraform
+      run: terraform apply -auto-approve
 
-    #- name: destruction
-    #  working-directory: terraform
-    #  run: terraform destroy -auto-approve
+    - name: run terraform destruction
+      working-directory: terraform
+      run: terraform destroy -auto-approve
