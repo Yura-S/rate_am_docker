@@ -59,7 +59,7 @@ jobs:
       
     - name: run packer building
       working-directory: packer
-      run: packer init .
+      run: packer build aws-ubuntu.pkr.hcl
 
     #- name: destruction
     #  working-directory: terraform
