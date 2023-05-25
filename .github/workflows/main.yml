@@ -86,11 +86,10 @@ jobs:
     - name: waiting for all instance checks to start ansible
       run: |
         CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-        while [ ! "$CHECK" = "passed" ]
-        do
+        while [ ! "$CHECK" = "passed" ]; do
           echo $CHECK `date`
           CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-        sleep 5
+          sleep 5
         done
         echo CREATED INSTANCE - $INSTANCE_ID
 
