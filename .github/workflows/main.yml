@@ -82,17 +82,17 @@ jobs:
           echo "Something wrong while getting website IP"
           exit 1
         fi
+        echo "instance id is $INSTANCE_ID"
       
-    - name: waiting for all instance checks to start ansible
-      run: |
-        CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-        echo $INSTANCE_ID
-        while [ "$CHECK" != "passed" ]; do
-          echo $CHECK `date`
-          CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-          sleep 5
-        done
-        echo CREATED INSTANCE - $INSTANCE_ID
+    #- name: waiting for all instance checks to start ansible
+    #  run: |
+    #    CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
+    #    while [ "$CHECK" != "passed" ]; do
+    #      echo $CHECK `date`
+    #      CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
+    #      sleep 5
+    #    done
+    #    echo CREATED INSTANCE - $INSTANCE_ID
 
     - name: run terraform destruction
       working-directory: terraform
