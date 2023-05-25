@@ -73,17 +73,6 @@ jobs:
       working-directory: terraform
       run: terraform apply -auto-approve
       
-    #- name: getting url and instance id of created instance
-    #  run: |
-    #    URL=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
-    #    INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
-    #    if [[ $? != 0 ]]
-    #      then
-    #      echo "Something wrong while getting website IP"
-    #      exit 1
-    #    fi
-    #    echo "instance id is $INSTANCE_ID"
-      
     - name: waiting for all instance checks to start ansible
       run: |
         CHECK=$(aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text)
@@ -94,6 +83,20 @@ jobs:
           sleep 5
         done
         echo CREATED INSTANCE - $INSTANCE_ID
+        
+    - name: setup ssh
+      run: |
+        IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan $IP >> ~/.ssh/known_hosts
+        
+    - name: run ansible playbook ans show instance ip
+      working-directory: ansible
+      run: |
+        ansible-playbook -i inventory.ini create-container.yml
+        echo "instance public ip is ${URL}"
 
     - name: run terraform destruction
       working-directory: terraform
