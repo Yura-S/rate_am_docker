@@ -84,20 +84,19 @@ jobs:
         done
         echo CREATED INSTANCE - $INSTANCE_ID
         
-    - name: setup ssh
+    - name: setup ssh and run ansible
+      working-directory: ansible
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
         mkdir -p ~/.ssh/
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan $IP >> ~/.ssh/known_hosts
-        
-    - name: run ansible playbook ans show instance ip
-      working-directory: ansible
-      run: |
+        echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
         ansible-playbook -i inventory.ini create-container.yml
-        echo "instance public ip is ${URL}"
-
+        rm inventory.ini
+        echo "instance public ip is ${IP}"
+        
     - name: run terraform destruction
       working-directory: terraform
       run: terraform destroy -auto-approve
