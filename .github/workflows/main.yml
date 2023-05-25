@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - main
-    paths:
-    - 'ansible/Dockerfile'  
+    #paths:
+    #- 'ansible/Dockerfile'  
   pull_request:
     branches:
       - main
-    paths:
-      - 'ansible/Dockerfile'  
+    #paths:
+    #  - 'ansible/Dockerfile'  
 
 jobs:
   build:
