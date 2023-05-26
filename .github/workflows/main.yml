@@ -88,21 +88,23 @@ jobs:
       working-directory: ansible
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
-        INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
-        aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID --availability-zone us-east-1 --instance-os-user ubuntu --ssh-public-key ${{ secrets.SSH_PUBLIC_KEY }}
+        
+        
+        
         mkdir -p ~/.ssh/
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        #yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
-        echo "show ssh private key"
-        sudo cat ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        sudo ls -la ~/.ssh
-        ssh-keyscan $IP >> ~/.ssh/known_hosts
-        echo "show known hosts"
-        sudo cat ~/.ssh/known_hosts
-        ps -ef | grep ssh
-        yes | ssh -T git@github.com
-        ssh -tt -o "StrictHostKeyChecking no" -i ~/.ssh/id_rsa ubuntu@${IP}
+        Host staging
+            HostName $IP
+            User ubuntu
+            IdentityFile ~/.ssh/id_rsa
+            StrictHostKeyChecking no
+        END
+        ssh -i ~/.ssh/id_rsa ubuntu@${IP}
+        
+        
+        
+        
         #echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
         #ansible-playbook -i inventory.ini create-container.yml
         #rm inventory.ini
