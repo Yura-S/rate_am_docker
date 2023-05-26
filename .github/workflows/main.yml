@@ -97,6 +97,7 @@ jobs:
         echo 3
         chmod 600 ~/.ssh/id_rsa
         echo 4
+        cat >>~/.ssh/config <<END
         Host staging
             HostName $IP
             User ubuntu
