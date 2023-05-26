@@ -107,7 +107,7 @@ jobs:
         echo 5
         cat ~/.ssh/id_rsa
         echo 6
-        ssh-keygen -R hostname
+        ssh-keygen -R $IP
         ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@$IP
         echo 7
         ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa staging
