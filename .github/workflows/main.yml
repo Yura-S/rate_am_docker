@@ -91,8 +91,12 @@ jobs:
         #mkdir -p ~/.ssh/
         #echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
+        echo "show ssh private key"
+        sudo cat ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan $IP >> ~/.ssh/known_hosts
+        echo "show known hosts"
+        sudo cat ~/.ssh/known_hosts
         ssh -o "StrictHostKeyChecking no" -i ~/.ssh/id_rsa ubuntu@${IP}
         #echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
         #ansible-playbook -i inventory.ini create-container.yml
