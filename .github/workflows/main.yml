@@ -93,8 +93,7 @@ jobs:
         
         mkdir -p ~/.ssh/
         echo 2
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+        ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
         echo 3
         chmod 600 ~/.ssh/id_rsa
         echo 4
