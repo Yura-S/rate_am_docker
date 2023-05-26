@@ -18,40 +18,40 @@ jobs:
 
     steps:
     
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}  
+    #- name: Configure AWS credentials
+    #  uses: aws-actions/configure-aws-credentials@v1
+    #  with:
+    #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #    aws-region: ${{ secrets.AWS_REGION }}  
     
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    #- name: Setup Terraform
+    #  uses: hashicorp/setup-terraform@v1
+    #  with:
+    #    cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           
     - name: install Python
       uses: actions/setup-python@v2
       with:
        python-version: 3
         
-    - name: Install ansible
-      run: pip install ansible  
+    #- name: Install ansible
+    #  run: pip install ansible  
     
-    - name: packer test command 
-      run: packer --version 
+    #- name: packer test command 
+    #  run: packer --version 
     
-    - name: ansible test command 
-      run: ansible --version 
+    #- name: ansible test command 
+    #  run: ansible --version 
     
-    - name: aws cli test command 
-      run: aws ec2 describe-instances 
+    #- name: aws cli test command 
+    #  run: aws ec2 describe-instances 
            
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: repo path
-      run: pwd
+    #- name: repo path
+    #  run: pwd
       
     #- name: run packer initialization
     #  working-directory: packer
@@ -89,19 +89,23 @@ jobs:
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
         
-        
+        echo 1
         
         mkdir -p ~/.ssh/
+        echo 2
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        echo 3
         chmod 600 ~/.ssh/id_rsa
+        echo 4
         Host staging
             HostName $IP
             User ubuntu
             IdentityFile ~/.ssh/id_rsa
             StrictHostKeyChecking no
         END
+        echo 5
         ssh -i ~/.ssh/id_rsa ubuntu@${IP}
-        
+        echo 6
         
         
         
