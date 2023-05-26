@@ -61,36 +61,36 @@ jobs:
     #  working-directory: packer
     #  run: packer build aws-ubuntu.pkr.hcl
     
-    - name: run terraform initialization
-      working-directory: terraform
-      run: terraform init
+    #- name: run terraform initialization
+    #  working-directory: terraform
+    #  run: terraform init
       
-    - name: run terraform planning
-      working-directory: terraform
-      run: terraform plan
+    #- name: run terraform planning
+    #  working-directory: terraform
+    #  run: terraform plan
       
-    - name: run terraform applying
-      working-directory: terraform
-      run: terraform apply -auto-approve
+    #- name: run terraform applying
+    #  working-directory: terraform
+    #  run: terraform apply -auto-approve
       
-    - name: waiting for all instance checks to start ansible
-      run: |
-        CHECK=$(aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text)
-        INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
-        while [ "$CHECK" != "passed" ]; do
-          echo $CHECK `date`
-          CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-          sleep 5
-        done
-        echo CREATED INSTANCE - $INSTANCE_ID
+    #- name: waiting for all instance checks to start ansible
+    #  run: |
+    #    CHECK=$(aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text)
+    #    INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
+    #    while [ "$CHECK" != "passed" ]; do
+    #      echo $CHECK `date`
+    #      CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
+    #      sleep 5
+    #    done
+    #    echo CREATED INSTANCE - $INSTANCE_ID
         
     - name: setup ssh and run ansible
       working-directory: ansible
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
-        #mkdir -p ~/.ssh/
-        #echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        #yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
         echo "show ssh private key"
         sudo cat ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
