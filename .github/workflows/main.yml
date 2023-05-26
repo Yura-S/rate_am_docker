@@ -107,8 +107,10 @@ jobs:
         echo 5
         cat ~/.ssh/id_rsa
         echo 6
-        ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa staging
+        ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@$IP
         echo 7
+        ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa staging
+        echo 8
         echo "end"
         
         
