@@ -105,8 +105,10 @@ jobs:
             StrictHostKeyChecking no
         END
         echo 5
-        ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${IP}
+        cat ~/.ssh/id_rsa
         echo 6
+        ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${IP}
+        echo 7
         
         
         
