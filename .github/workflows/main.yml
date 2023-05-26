@@ -109,7 +109,7 @@ jobs:
         echo 6
         ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@$IP
         echo 7
-        ssh -tt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa staging
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa staging -tt
         echo 8
         echo "end"
         
