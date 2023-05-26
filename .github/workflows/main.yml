@@ -88,6 +88,8 @@ jobs:
       working-directory: ansible
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+        INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
+        aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID --availability-zone us-east-1 --instance-os-user ubuntu --ssh-public-key ${{ secrets.SSH_PUBLIC_KEY }}
         mkdir -p ~/.ssh/
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         #yes | sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa -N "" -q
