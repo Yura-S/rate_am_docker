@@ -53,13 +53,22 @@ jobs:
     - name: repo path
       run: pwd
       
-    #- name: run packer initialization
-    #  working-directory: packer
-    #  run: packer init .
+    - name: run terraform destruction
+      working-directory: terraform
+      run: terraform destroy -auto-approve
       
-    #- name: run packer building
-    #  working-directory: packer
-    #  run: packer build aws-ubuntu.pkr.hcl
+    - name: run ami and snapshot destruction
+      run: |
+        aws ec2 describe-images --filters "Name=tag:name,Values=WebSiteImage" --query 'Images[].ImageId' --output text | xargs -n 1 aws ec2 deregister-image --image-id
+        aws ec2 describe-snapshots --filters "Name=tag:name,Values=WebSiteImage" --query 'Snapshots[].SnapshotId' --output text | xargs -n 1 aws ec2 delete-snapshot --snapshot-id  
+      
+    - name: run packer initialization
+      working-directory: packer
+      run: packer init .
+      
+    - name: run packer building
+      working-directory: packer
+      run: packer build aws-ubuntu.pkr.hcl
     
     - name: run terraform initialization
       working-directory: terraform
@@ -98,11 +107,4 @@ jobs:
         rm inventory.ini
         echo "instance public ip is ${IP}"
         
-    - name: run terraform destruction
-      working-directory: terraform
-      run: terraform destroy -auto-approve
-      
-    - name: run ami and snapshot destruction
-      run: |
-        aws ec2 describe-images --filters "Name=tag:name,Values=WebSiteImage" --query 'Images[].ImageId' --output text | xargs -n 1 aws ec2 deregister-image --image-id
-        aws ec2 describe-snapshots --filters "Name=tag:name,Values=WebSiteImage" --query 'Snapshots[].SnapshotId' --output text | xargs -n 1 aws ec2 delete-snapshot --snapshot-id
+    
