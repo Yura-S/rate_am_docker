@@ -25,27 +25,27 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}  
     
-    #- name: Setup Terraform
-    #  uses: hashicorp/setup-terraform@v1
-    #  with:
-    #    cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           
-    #- name: install Python
-    #  uses: actions/setup-python@v2
-    #  with:
-    #   python-version: 3
+    - name: install Python
+      uses: actions/setup-python@v2
+      with:
+       python-version: 3
         
-    #- name: Install ansible
-    #  run: pip install ansible  
+    - name: Install ansible
+      run: pip install ansible  
     
-    #- name: packer test command 
-    #  run: packer --version 
+    - name: packer test command 
+      run: packer --version 
     
-    #- name: ansible test command 
-    #  run: ansible --version 
+    - name: ansible test command 
+      run: ansible --version 
     
-    #- name: aws cli test command 
-    #  run: aws ec2 describe-instances 
+    - name: aws cli test command 
+      run: aws ec2 describe-instances 
            
     - name: Checkout code
       uses: actions/checkout@v2
@@ -61,54 +61,43 @@ jobs:
     #  working-directory: packer
     #  run: packer build aws-ubuntu.pkr.hcl
     
-    #- name: run terraform initialization
-    #  working-directory: terraform
-    #  run: terraform init
+    - name: run terraform initialization
+      working-directory: terraform
+      run: terraform init
       
-    #- name: run terraform planning
-    #  working-directory: terraform
-    #  run: terraform plan
+    - name: run terraform planning
+      working-directory: terraform
+      run: terraform plan
       
-    #- name: run terraform applying
-    #  working-directory: terraform
-    #  run: terraform apply -auto-approve
+    - name: run terraform applying
+      working-directory: terraform
+      run: terraform apply -auto-approve
       
-    #- name: waiting for all instance checks to start ansible
-    #  run: |
-    #    CHECK=$(aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text)
-    #    INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
-    #    while [ "$CHECK" != "passed" ]; do
-    #      echo $CHECK `date`
-    #      CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
-    #      sleep 5
-    #    done
-    #    echo CREATED INSTANCE - $INSTANCE_ID
+    - name: waiting for all instance checks to start ansible
+      run: |
+        CHECK=$(aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text)
+        INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
+        while [ "$CHECK" != "passed" ]; do
+          echo $CHECK `date`
+          CHECK=`aws ec2 describe-instance-status --instance-id $INSTANCE_ID --query InstanceStatuses[].SystemStatus[].Details[].Status --output text`
+          sleep 5
+        done
+        echo CREATED INSTANCE - $INSTANCE_ID
         
     - name: setup ssh and run ansible
       working-directory: ansible
       run: |
         IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
         INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
-
-        echo 1
         ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
-        echo 2
         chmod 600 ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa.pub
-        cat ~/.ssh/id_rsa.pub
-        echo 3
         aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://~/.ssh/id_rsa.pub
-        echo 4
-        #ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${IP} 
-        echo "connected"
-        
-        
-        
         echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > inventory.ini
         ansible-playbook -i inventory.ini create-container.yml
         rm inventory.ini
         echo "instance public ip is ${IP}"
         
-    #- name: run terraform destruction
-    #  working-directory: terraform
-    #  run: terraform destroy -auto-approve
+    - name: run terraform destruction
+      working-directory: terraform
+      run: terraform destroy -auto-approve
