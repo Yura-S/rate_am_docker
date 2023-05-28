@@ -59,7 +59,7 @@ jobs:
       
     - name: run terraform destruction
       working-directory: terraform
-      run: terraform destroy -auto-approve
+      run: terraform destroy -auto-approve || true
       
     - name: run ami and snapshot destruction
       run: |
