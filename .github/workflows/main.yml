@@ -95,6 +95,7 @@ jobs:
         echo 2
         chmod 600 ./id_rsa2
         chmod 600 ./id_rsa2.pub
+        cat ./id_rsa2.pub
         echo 3
         aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa2.pub
         echo 4
