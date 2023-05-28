@@ -94,6 +94,7 @@ jobs:
         ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa1
         echo 2
         chmod 600 ./id_rsa1
+        chmod 600 ./id_rsa1.pub
         echo 3
         aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa1.pub
         echo 4
