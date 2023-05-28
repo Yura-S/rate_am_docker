@@ -16,3 +16,32 @@ jobs:
     
     - name: testcommand
       run: ls -la
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        
+    - name: install Python
+      uses: actions/setup-python@v2
+      with:
+       python-version: 3   
+
+    - name: Install ansible
+      run: pip install ansible  
+      
+    - name: setup ssh and run ansible
+      working-directory: ansible
+      run: |
+        IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+        INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
+        ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa.pub
+        aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://~/.ssh/id_rsa.pub
+        echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > inventory.ini
+        ansible-playbook -i inventory.ini create-container.yml
+        rm inventory.ini
+        echo "instance public ip is ${IP}"  
