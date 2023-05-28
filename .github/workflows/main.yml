@@ -99,7 +99,7 @@ jobs:
         echo 3
         aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa2.pub
         echo 4
-        ssh -tt -o StrictHostKeyChecking=no -i ./id_rsa2.pub ubuntu@${IP} 
+        ssh -tt -o StrictHostKeyChecking=no -i ./id_rsa2 ubuntu@${IP} 
         echo "connected"
         
         
