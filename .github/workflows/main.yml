@@ -91,20 +91,20 @@ jobs:
         INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=Website --region us-east-1 --query 'Reservations[].Instances[?!contains(State.Name, `terminated`)].InstanceId' --output text)
 
         echo 1
-        ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa2
+        ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa2
         echo 2
-        chmod 600 ./id_rsa2
-        chmod 600 ./id_rsa2.pub
-        cat ./id_rsa2.pub
+        chmod 600 ~/.ssh/id_rsa2
+        chmod 600 ~/.ssh/id_rsa2.pub
+        cat ~/.ssh/id_rsa2.pub
         echo 3
-        aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://./id_rsa2.pub
+        aws ec2-instance-connect send-ssh-public-key --instance-id $INSTANCE_ID  --instance-os-user ubuntu --ssh-public-key file://~/.ssh/id_rsa2.pub
         echo 4
-        ssh -tt -o StrictHostKeyChecking=no -i ./id_rsa2 ubuntu@${IP} 
+        ssh -tt -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa2 ubuntu@${IP} 
         echo "connected"
         
         
         
-        #echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" > inventory.ini
+        #echo "server1 ansible_host=${IP} ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > inventory.ini
         #ansible-playbook -i inventory.ini create-container.yml
         #rm inventory.ini
         #echo "instance public ip is ${IP}"
