@@ -53,13 +53,13 @@ jobs:
     - name: repo path
       run: pwd
       
-    - name: run packer initialization
-      working-directory: packer
-      run: packer init .
+    #- name: run packer initialization
+    #  working-directory: packer
+    #  run: packer init .
       
-    - name: run packer building
-      working-directory: packer
-      run: packer build aws-ubuntu.pkr.hcl
+    #- name: run packer building
+    #  working-directory: packer
+    #  run: packer build aws-ubuntu.pkr.hcl
     
     - name: run terraform initialization
       working-directory: terraform
